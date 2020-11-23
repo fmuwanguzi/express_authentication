@@ -43,27 +43,28 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'user',
   });
+
+  user.addHook('beforeCreate', function(pendingUser){
+    //bcrypt hash a password for us
+    let hash = bcrypt.hashSync(pendingUser.password, 12);
+  
+    // set password to equal the hash
+    pendingUser.password = hush;
+    });
+  
+    user.prototype.validPassword = function(passordTyped){
+      let correctPassword = bcrypt.compareSync(passwordTyped, this.password);
+  
+  //return true or false based on correct password or not
+      return correctPassword;
+    }
+  
+    //remove the password before it gets serialized
+    user.prototype.toJSon = function(){
+      let userData = this.get();
+      delete userData.paswword;
+      return userData;
+    }
   return user;
 };
 
-user.addHook('beforeCreate', function(pendingUser){
-  //bcrypt hash a password for us
-  let hash = bcrypt.hashSync(pendingUser.password, 12);
-
-  // set password to equal the hash
-  pendingUser.password = hush;
-  });
-
-  user.prototype.validPassword = function(passordTyped){
-    let correctPassword = bcrypt.compareSync(passwordTyped, this.password);
-
-//return true or false based on correct password or not
-    return correctPassword;
-  }
-
-  //remove the password before it gets serialized
-  user.prototype.toJSon = function(){
-    let userData = this.get();
-    delete userData.paswword;
-    return userData;
-  }

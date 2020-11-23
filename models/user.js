@@ -49,6 +49,7 @@ module.exports = (sequelize, DataTypes) => {
   user.addHook('beforeCreate', function(pendingUser) {
     // Bcrypt hash a password for us
     let hash = bcrypt.hashSync(pendingUser.password, 12);
+    
     // Set password to equal the hash
     pendingUser.password = hash;
     console.log(pendingUser);
@@ -57,6 +58,7 @@ module.exports = (sequelize, DataTypes) => {
   user.prototype.validPassword = function(passwordTyped) {
     let correctPassword = bcrypt.compareSync(passwordTyped, this.password);
     console.log('Inside of validPassword', correctPassword);
+    
     // return true or false based on correct password or not
     return correctPassword;
   }

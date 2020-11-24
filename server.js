@@ -39,7 +39,7 @@ app.use(passport.session());
 app.use(flash());
 
 //Messages that will be accessible to every user
-app.use((req,res, next) => {
+app.use((req, res, next) => {
   // before every route, we will attach a user to res.local
   res.locals.alerts = req.flash();
   res.locals.currentUser = req.user;
@@ -48,7 +48,7 @@ app.use((req,res, next) => {
 
 app.get('/', (req, res) => {
   console.log(res.locals.alerts)
-  res.render('index', {alerts: res.locals.alerts} );
+  res.render('index', {alerts: res.locals.alerts});
 });
 
 app.get('/profile', isLoggedIn, (req, res) => {
